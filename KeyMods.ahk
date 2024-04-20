@@ -1,5 +1,5 @@
 /**
- * GetSystemTime used in script is from skan
+* GetSystemTime used in script is from skan
 * @GetSystemTime
 * @author @skan
 * @source https://www.autohotkey.com/boards/viewtopic.php?t=3401
@@ -452,11 +452,10 @@ class Leader {
             ih.KeyOpt('{All}', 'N')                                             ; all keys notify
             mods :='{LShift}{RShift}{LCtrl}{RCtrl}{LAlt}{RAlt}{LWin}{RWin}'     ; modifiers
             ih.KeyOpt(mods, '-N')                                               ; remove modifiers from notifying callbacks
-            ih.OnEnd := (ih) {                                                  ; when leader operation stops
-                if ih.EndReason = 'Timeout' {                                   ; if input stopped because it timed out
-                    ldr.sequences.Has(ldr.buffer) ? Stop(ldr.buffer) : Stop()   ; reset and show appropriate display message
-                }
-            }
+            ih.OnEnd := (ih) => (                                               ; when leader operation stops
+                ih.EndReason = 'Timeout' and ldr.sequences.Has(ldr.buffer) ?    ; if input stopped because it timed out and a match is found
+                Stop(ldr.buffer) : Stop()                                       ; reset and show appropriate display message
+            )
             return ih                                                           ; return inputhook
         }
     }
