@@ -452,11 +452,14 @@ class Leader {
             ih.KeyOpt('{All}', 'N')                                             ; all keys notify
             mods :='{LShift}{RShift}{LCtrl}{RCtrl}{LAlt}{RAlt}{LWin}{RWin}'     ; modifiers
             ih.KeyOpt(mods, '-N')                                               ; remove modifiers from notifying callbacks
-            ih.OnEnd := (ih) => (                                               ; when leader operation stops
-                ih.EndReason = 'Timeout' and ldr.sequences.Has(ldr.buffer) ?    ; if input stopped because it timed out and a match is found
-                Stop(ldr.buffer) : Stop()                                       ; reset and show appropriate display message
-            )
+            ih.OnEnd := OnEnd                                                   ; when leader operation stops
             return ih                                                           ; return inputhook
+
+            OnEnd(ih) {
+                if ih.EndReason = 'Timeout' {                                   ; if input stopped because it timed out
+                    ldr.sequences.Has(ldr.buffer) ? Stop(ldr.buffer) : Stop()   ; if a match is found; reset and show appropriate display message
+                }
+            }
         }
     }
 
